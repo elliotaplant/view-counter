@@ -9,8 +9,9 @@ let protocol;
 const options = {};
 if (process.argv[3] == 'ssl') {
   protocol = require('https');
-  options.key = fs.readFileSync(process.argv[4]).toString();
-  options.cert = fs.readFileSync(process.argv[5]).toString();
+  options.key = fs.readFileSync(`${process.argv[4]}/privkey.pem`).toString();
+  options.cert = fs.readFileSync(`${process.argv[4]}/cert.pem`).toString();
+  options.ca = fs.readFileSync(`${process.argv[4]}/chain.pem`).toString();
 } else {
   protocol = require('http');
 }
