@@ -8,11 +8,9 @@ const port = process.argv[2] || 8080;
 let statsWritePending = false;
 
 const server = http.createServer((req, res) => {
-  const { host = 'unknown_host', referer = 'unknown_referrer' } = req.headers;
-  stats[host] = stats[host] || { total: 0 };
-  stats[host].total++;
-  stats[host][referer] = stats[host][referer] || 0;
-  stats[host][referer]++;
+  const { referer = 'unknown_referrer' } = req.headers;
+  stats[referer] = stats[referer] || 0;
+  stats[referer]++;
 
   if (!statsWritePending) {
     setTimeout(() => {
