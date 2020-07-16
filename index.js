@@ -1,13 +1,23 @@
 const fs = require('fs');
-const http = require('http');
 
 const stats = require('./stats.json');
 
+
 const port = process.argv[2] || 8080;
+
+let protocol;
+const options = {};
+if (process.argv[3] == 'ssl') {
+  protocol = require('https');
+  options.key = fs.readFileSync(process.argv[4]).toString();
+  options.cert = fs.readFileSync(process.argv[5]).toString();
+} else {
+  protocol = require('http');
+}
 
 let statsWritePending = false;
 
-const server = http.createServer((req, res) => {
+const handler = (req, res) => {
   const { referer = 'unknown_referrer' } = req.headers;
   stats[referer] = stats[referer] || 0;
   stats[referer]++;
@@ -27,8 +37,9 @@ const server = http.createServer((req, res) => {
 
   res.writeHead(200);
   res.end();
-});
+};
 
 
+const server = protocol.createServer(handler);
 console.log('Server listening on port', port);
 server.listen(port);
