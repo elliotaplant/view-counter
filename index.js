@@ -41,6 +41,6 @@ const handler = (req, res) => {
 };
 
 
-const server = protocol.createServer(handler);
+const server = protocol.createServer(options, handler);
 console.log('Server listening on port', port);
 server.listen(port);
