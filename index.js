@@ -3,6 +3,8 @@ const http = require('http');
 
 const stats = require('./stats.json');
 
+const port = process.env.PORT || 8080;
+
 let statsWritePending = false;
 
 const server = http.createServer((req, res) => {
@@ -28,4 +30,6 @@ const server = http.createServer((req, res) => {
   res.end();
 });
 
-server.listen(process.env.PORT || 8080);
+
+console.log('Server listening on port', port);
+server.listen(port);
