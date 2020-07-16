@@ -3,7 +3,7 @@ const http = require('http');
 
 const stats = require('./stats.json');
 
-const port = process.env.PORT || 8080;
+const port = process.argv[2] || 8080;
 
 let statsWritePending = false;
 
