@@ -8,14 +8,15 @@ const port = process.argv[2] || 8080;
 let statsWritePending = false;
 
 const server = http.createServer((req, res) => {
-  stats[req.headers.origin] = stats[req.headers.origin] || { viewCount: 0 };
-  stats[req.headers.origin].viewCount++;
-  stats[req.headers.origin][req.url] = stats[req.headers.origin][req.url] || { viewCount: 0 };
-  stats[req.headers.origin][req.url].viewCount++;
+  const { host = 'unknown_host', referer = 'unknown_referrer' } = req.headers;
+  stats[host] = stats[host] || { total: 0 };
+  stats[host].total++;
+  stats[host][referer] = stats[host][referer] || 0;
+  stats[host][referer]++;
 
   if (!statsWritePending) {
     setTimeout(() => {
-      fs.writeFile('./stats.json', JSON.stringify(stats, null, 2), (err) => {
+      fs.writeFile('./stats.json', JSON.stringify(stats, null, 2) + '\n', (err) => {
         statsWritePending = false;
         if (err) {
           console.error(err);
